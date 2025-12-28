@@ -14,6 +14,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   fetch-deps:
@@ -81,27 +82,6 @@ jobs:
         shell: bash
         run: |
           pip install git+https://github.com/isledecomp/reccmp
-
-      # - name: Restore cached reccmp install
-      #   id: cache-reccmp-install
-      #   uses: actions/cache/restore@v4
-      #   with:
-      #     enableCrossOsArchive: true
-      #     path: reccmp-python-package
-      #     key: reccmp-python-package
-
-      # - name: Install reccmp python package
-      #   if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
-      #   run: |
-      #     pip install git+https://github.com/isledecomp/reccmp
-
-      # - name: Cache reccmp install
-      #   if: ${{ !steps.cache-reccmp-install.outputs.cache-hit }}
-      #   uses: actions/cache/save@v4
-      #   with:
-      #     enableCrossOsArchive: true
-      #     path: reccmp-python-package
-      #     key: reccmp-python-package
 
       - name: Detect binary
         run: |
@@ -268,42 +248,42 @@ jobs:
                 ].join('\n')
               : '_None_';
 
-            const body = `
-      ${TAG}
-
-      ## 📊 CMR2 Accuracy Report
-
-      **Functions:** ${total}  
-      **Effective Accuracy:** **${effective}%**  
-      **Aligned:** ${aligned} (${alignedPct}%)
-
-      ---
-
-      ### ✅ Increased
-      ${deltaTable(increased)}
-
-      ---
-
-      ### ⚠️ Decreased
-      ${deltaTable(decreased)}
-
-      ---
-
-      ### ➕ Added
-      ${simpleTable(added)}
-
-      ---
-
-      ### 🧱 Stubbed
-      ${stubTable}
-
-      ---
-
-      ### ❌ Gone
-      ${goneTable}
-
-      _Last updated by GitHub Actions_
-      `;
+            const body = [
+              TAG,
+              '',
+              '## 📊 CMR2 Accuracy Report',
+              '',
+              `**Functions:** ${total}  `,
+              `**Effective Accuracy:** **${effective}%**  `,
+              `**Aligned:** ${aligned} (${alignedPct}%)`,
+              '',
+              '---',
+              '',
+              '### ✅ Increased',
+              deltaTable(increased),
+              '',
+              '---',
+              '',
+              '### ⚠️ Decreased',
+              deltaTable(decreased),
+              '',
+              '---',
+              '',
+              '### ➕ Added',
+              simpleTable(added),
+              '',
+              '---',
+              '',
+              '### 🧱 Stubbed',
+              stubTable,
+              '',
+              '---',
+              '',
+              '### ❌ Gone',
+              goneTable,
+              '',
+              '_Last updated by GitHub Actions_'
+            ].join('\n');
 
             const { owner, repo } = context.repo;
             const issue_number = context.issue.number;
@@ -330,4 +310,3 @@ jobs:
                 body
               });
             }
-            
