@@ -240,15 +240,6 @@ jobs:
                 ].join('\n')
               : '_None_';
 
-            // Human-readable UTC timestamp
-            function pad(n) { return n < 10 ? '0' + n : n; }
-
-            const now = new Date();
-            const timestamp = now.getUTCFullYear() + '-' +
-                              pad(now.getUTCMonth() + 1) + '-' +
-                              pad(now.getUTCDate()) + ' ' +
-                              pad(now.getUTCHours()) + ':' +
-                              pad(now.getUTCMinutes()) + ' UTC';
 
             const body = [
               TAG,
@@ -284,7 +275,7 @@ jobs:
               '### ❌ Gone',
               goneTable,
               '',
-              `_Last updated by CMR2Decomp Bot on ${timestamp}_`
+              `_Last updated by CMR2Decomp Bot_`
             ].join('\n');
 
             const { owner, repo } = context.repo;
