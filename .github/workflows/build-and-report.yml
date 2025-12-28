@@ -127,12 +127,18 @@ jobs:
             const STUB_THRESHOLD = 0.001;
 
             function load(path) {
-              if (!fs.existsSync(path)) return null;
+              if (!fs.existsSync(path)) {
+                console.log("file doesnt exist.");
+                return null;
+              }
               return JSON.parse(fs.readFileSync(path, 'utf8'));
             }
 
             const currentRaw = load('CMR2PROGRESS/summary.json');
             const previousRaw = load('summary-old.json');
+
+            console.log("current raw:", currentRaw);
+            console.log("previous raw:", currentRaw);
 
             const current = currentRaw?.functions || [];
             const previous = previousRaw?.functions || [];
