@@ -16,6 +16,10 @@ struct GameInfo
     undefined field9_0x21;
     undefined field10_0x22;
     undefined field11_0x23;
+    unsigned int field_0x88;
+    unsigned int field_0x8c;
+    unsigned int field_0x90;
+    short field_0x94;    
     int screenWidth;
     int screenHeight;
     int screenColourDepth;
@@ -36,6 +40,7 @@ public:
     static unsigned int GetColourDepth(void);
     static void SetColourDepth(unsigned int depth);
     static char *GetGameRegionDirectory(void);
+    static void FUN_00510570(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
