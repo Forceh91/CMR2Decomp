@@ -128,7 +128,7 @@ jobs:
 
             function load(path) {
               if (!fs.existsSync(path)) {
-                console.log("file doesnt exist.");
+                console.log("file doesn't exist.");
                 return null;
               }
               return JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -154,9 +154,7 @@ jobs:
             current.forEach(fn => currMap.set(fn.address, fn));
 
             const prevMap = new Map();
-            if (previous) {
-              previous.forEach(fn => prevMap.set(fn.address, fn));
-            }
+            if (previous) previous.forEach(fn => prevMap.set(fn.address, fn));
 
             const increased = [];
             const decreased = [];
@@ -178,20 +176,15 @@ jobs:
 
               if (!prev) {
                 added.push(fn);
-                if (fn.matching <= STUB_THRESHOLD) {
-                  stubbed.push({ fn, reason: 'new stub' });
-                }
+                if (fn.matching <= STUB_THRESHOLD) stubbed.push({ fn, reason: 'new stub' });
                 continue;
               }
 
               const prevPct = prev.matching * 100;
               const currPct = fn.matching * 100;
 
-              if (currPct > prevPct + 0.01) {
-                increased.push({ fn, prevPct, currPct });
-              } else if (currPct < prevPct - 0.01) {
-                decreased.push({ fn, prevPct, currPct });
-              }
+              if (currPct > prevPct + 0.01) increased.push({ fn, prevPct, currPct });
+              else if (currPct < prevPct - 0.01) decreased.push({ fn, prevPct, currPct });
 
               if (prev.matching > STUB_THRESHOLD && fn.matching <= STUB_THRESHOLD) {
                 stubbed.push({ fn, reason: 'regressed to stub' });
@@ -199,9 +192,7 @@ jobs:
             }
 
             for (const [addr, fn] of prevMap) {
-              if (!currMap.has(addr)) {
-                gone.push(fn);
-              }
+              if (!currMap.has(addr)) gone.push(fn);
             }
 
             const effective = ((matched / total) * 100).toFixed(2);
@@ -212,9 +203,7 @@ jobs:
               return [
                 '| Address | Function | Before | After |',
                 '|--------:|----------|--------|-------|',
-                ...rows.map(r =>
-                  `| \`${r.fn.address}\` | ${r.fn.name} | ${r.prevPct.toFixed(2)}% | **${r.currPct.toFixed(2)}%** |`
-                )
+                ...rows.map(r => `| \`${r.fn.address}\` | ${r.fn.name} | ${r.prevPct.toFixed(2)}% | **${r.currPct.toFixed(2)}%** |`)
               ].join('\n');
             }
 
@@ -223,9 +212,7 @@ jobs:
               return [
                 '| Address | Function | Accuracy |',
                 '|--------:|----------|----------|',
-                ...rows.map(
-                  f => `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`
-                )
+                ...rows.map(f => `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`)
               ].join('\n');
             }
 
@@ -233,9 +220,7 @@ jobs:
               ? [
                   '| Address | Function | Previous Accuracy |',
                   '|--------:|----------|-------------------|',
-                  ...gone.map(
-                    f => `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`
-                  )
+                  ...gone.map(f => `| \`${f.address}\` | ${f.name} | ${(f.matching * 100).toFixed(2)}% |`)
                 ].join('\n')
               : '_None_';
 
@@ -243,11 +228,19 @@ jobs:
               ? [
                   '| Address | Function | Reason |',
                   '|--------:|----------|--------|',
-                  ...stubbed.map(
-                    s => `| \`${s.fn.address}\` | ${s.fn.name} | ${s.reason} |`
-                  )
+                  ...stubbed.map(s => `| \`${s.fn.address}\` | ${s.fn.name} | ${s.reason} |`)
                 ].join('\n')
               : '_None_';
+
+            // ---- Add timestamp ----
+            const now = new Date();
+            function pad(n) { return n < 10 ? '0' + n : n; }
+            const timestamp = now.getUTCFullYear() + '-' +
+                              pad(now.getUTCMonth()+1) + '-' +
+                              pad(now.getUTCDate()) + ' ' +
+                              pad(now.getUTCHours()) + ':' +
+                              pad(now.getUTCMinutes()) + + ':' +
+                              pad(now.getUTCSeconds()) + ' UTC';
 
             const body = [
               TAG,
@@ -283,7 +276,7 @@ jobs:
               '### ❌ Gone',
               goneTable,
               '',
-              '_Last updated by CMR2Decomp Bot_'
+              `_Last updated by CMR2Decomp Bot on ${timestamp}_`
             ].join('\n');
 
             const { owner, repo } = context.repo;
@@ -297,19 +290,9 @@ jobs:
             const existing = comments.find(c => c.body.includes(TAG));
 
             if (existing) {
-              await github.rest.issues.updateComment({
-                owner,
-                repo,
-                comment_id: existing.id,
-                body
-              });
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
             } else {
-              await github.rest.issues.createComment({
-                owner,
-                repo,
-                issue_number,
-                body
-              });
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
             }
 
       - name: Commit Accuracy Reports
