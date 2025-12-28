@@ -16,6 +16,10 @@ struct GameInfo
     undefined field9_0x21;
     undefined field10_0x22;
     undefined field11_0x23;
+    unsigned int field_0x88;
+    unsigned int field_0x8c;
+    unsigned int field_0x90;
+    short field_0x94;    
     int screenWidth;
     int screenHeight;
     int screenColourDepth;
