@@ -135,16 +135,18 @@ jobs:
             }
 
             const currentRaw = load('CMR2PROGRESS/summary.json');
-            const previousRaw = load('summary-old.json');
-
-            console.log("current raw:", currentRaw);
-            console.log("previous raw:", currentRaw);
-
-            const current = currentRaw?.functions || [];
-            const previous = previousRaw?.functions || [];
-
             if (!currentRaw) {
               core.setFailed('summary.json not found');
+              return;
+            }
+
+            const previousRaw = load('summary-old.json');
+
+            const current = currentRaw?.data || [];
+            const previous = previousRaw?.data || [];
+
+            if (!current.length) {
+              console.log('No functions found in summary.json, skipping PR comment.');
               return;
             }
 
