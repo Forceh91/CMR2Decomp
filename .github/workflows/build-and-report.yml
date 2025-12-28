@@ -89,7 +89,6 @@ jobs:
           reccmp-project detect --what recompiled --search-path build
 
       - name: Compare Accuracy to main
-        if: github.ref != 'refs/heads/main' # Only runs on pull requests
         shell: bash
         env:
           RELEASE_URL: https://raw.githubusercontent.com/CMR2Decomp/CMR2Decomp/refs/heads/main/CMR2PROGRESS/
