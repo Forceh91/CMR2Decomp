@@ -164,13 +164,13 @@ jobs:
 
             let total = 0;
             let matched = 0;
-            let aligned = 0;
+            let fullMatch = 0;
 
             for (const fn of current) {
               total++;
               matched += fn.matching;
 
-              if (!fn.diff || fn.diff.length === 0) aligned++;
+              if (!fn.diff || fn.diff.length === 0) fullMatch++;
 
               const prev = prevMap.get(fn.address);
 
@@ -196,7 +196,7 @@ jobs:
             }
 
             const effective = ((matched / total) * 100).toFixed(2);
-            const alignedPct = ((aligned / total) * 100).toFixed(2);
+            const fullMatchPct = ((fullMatch / total) * 100).toFixed(2);
 
             function deltaTable(rows) {
               if (!rows.length) return '_None_';
@@ -249,7 +249,7 @@ jobs:
               '',
               `**Functions:** ${total}  `,
               `**Effective Accuracy:** **${effective}%**  `,
-              `**Aligned:** ${aligned} (${alignedPct}%)`,
+              `**Fully Matching:** ${fullMatch} (${fullMatchPct}%)`,
               '',
               '---',
               '',
