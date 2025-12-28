@@ -78,3 +78,9 @@ void CGameInfo::SetColourDepth(unsigned int depth)
 {
     m_gameInfo.screenColourDepth = depth;
 }
+
+// FUNCTION: CMR2 0x00510570
+void CGameInfo::FUN_00510570(void)
+{
+    m_gameInfo.field10_0x22 = 5;
+}

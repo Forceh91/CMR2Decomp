@@ -36,6 +36,7 @@ public:
     static unsigned int GetColourDepth(void);
     static void SetColourDepth(unsigned int depth);
     static char *GetGameRegionDirectory(void);
+    static void FUN_00510570(void);
 
     // GLOBAL: CMR2 0x0052afa0
     static GameInfo m_gameInfo;
