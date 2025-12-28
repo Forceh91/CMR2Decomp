@@ -131,10 +131,13 @@ jobs:
               return JSON.parse(fs.readFileSync(path, 'utf8'));
             }
 
-            const current = load('CMR2PROGRESS/summary.json');
-            const previous = load('summary-old.json');
+            const currentRaw = load('CMR2PROGRESS/summary.json');
+            const previousRaw = load('summary-old.json');
 
-            if (!current) {
+            const current = currentRaw?.functions || [];
+            const previous = previousRaw?.functions || [];
+
+            if (!currentRaw) {
               core.setFailed('summary.json not found');
               return;
             }
